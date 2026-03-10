@@ -22,7 +22,7 @@ if [ -z "$INPUT" ] || [ ! -f "$INPUT" ]; then
   exit 1
 fi
 
-python3 << 'PYEOF'
+python3 - "$INPUT" << 'PYEOF'
 import json, sys, urllib.parse
 
 with open(sys.argv[1]) as f:
