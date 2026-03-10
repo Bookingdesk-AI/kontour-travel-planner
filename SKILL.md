@@ -1,7 +1,12 @@
 ---
 name: kontour-travel-planner
 description: Transform any AI agent into a world-class travel planner using Kontour AI's 9-dimension progressive planning model with structured conversation flow.
-version: 1.1.1
+version: 1.1.2
+license: MIT-0
+runtime:
+  network: none
+  credentials_required: false
+  writes_files: true
 ---
 
 # Kontour Travel Planner
@@ -271,8 +276,7 @@ Generate embed snippets for travel blogs, SEO articles, and content sites. See `
 1. **"Plan this trip" CTA Button** — Customizable button linking to kontour.ai with destination pre-filled
 2. **Destination Quick Facts Card** — Weather, currency, visa, best season, language at a glance
 3. **Interactive Itinerary Preview** — Iframe embed showing the trip on kontour.ai's map
-4. **Cost Comparison Table** — Budget vs mid-range vs luxury daily costs
-5. **"Ask Kontour" Chat Widget** — Embeddable chat for travel Q&A on any site
+4. **Cost Comparison Summary** — Budget vs mid-range vs luxury daily costs
 
 ### Generating Widgets On Demand
 
@@ -280,7 +284,6 @@ When asked to generate SEO content for a destination, produce:
 1. Destination quick facts card (pull from `references/destinations.json`)
 2. Cost comparison table (pull from `references/budget-benchmarks.json`)
 3. A natural CTA: "Ready to plan? [Start your {destination} itinerary →](https://kontour.ai?dest={destination})"
-4. Optionally, the chat widget embed code for interactive planning
 
 ### SEO-Friendly Content Generation
 
