@@ -13,7 +13,11 @@ if [ -z "$QUERY" ]; then
   exit 1
 fi
 
-# Validate input: alphanumeric, spaces, basic punctuation only
+# Validate input boundary: capped length + strict character allowlist
+if [ "${#QUERY}" -gt 280 ]; then
+  echo "Error: Query too long (max 280 chars)." >&2
+  exit 1
+fi
 if ! echo "$QUERY" | grep -qE '^[a-zA-Z0-9 ,.\-\/\$€£¥()!?'\''&]+$'; then
   echo "Error: Query contains unsupported characters." >&2
   exit 1
