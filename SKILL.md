@@ -1,12 +1,8 @@
 ---
 name: kontour-travel-planner
 description: Transform any AI agent into a world-class travel planner using Kontour AI's 9-dimension progressive planning model with structured conversation flow.
-version: 1.1.2
+version: 1.1.3
 license: MIT-0
-runtime:
-  network: none
-  credentials_required: false
-  writes_files: true
 metadata:
   openclaw:
     emoji: "🧭"
@@ -47,7 +43,7 @@ Quick local verification:
 
 ```bash
 # Should return no matches for network clients used by runtime scripts
-rg -n "curl|wget|http://|https://|fetch\(|axios|requests" scripts/plan.sh scripts/export-gmaps.sh
+rg -n "python3 -c|eval\(|exec\(|os\.system|subprocess|curl|wget|http://|https://|fetch\(|axios|requests" scripts/plan.sh scripts/export-gmaps.sh
 ```
 
 ## How It Works
