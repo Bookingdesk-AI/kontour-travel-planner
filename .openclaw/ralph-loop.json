@@ -2,12 +2,13 @@
   "loop": "adaptive-ralph-v1",
   "updated_at": "2026-03-10T10:06:00-08:00",
   "strategy": "implement",
-  "outcome": "partial_success",
+  "outcome": "shipped_with_publish_blocker",
   "progress_delta": 1,
   "confidence": 0.79,
   "risk": "low",
   "blockers": [
-    "git pull --rebase blocked by pre-existing unstaged changes in SKILL.md/scripts and deleted IMPROVEMENT_PLAN.md"
+    "Initial git pull --rebase was blocked by unstaged local changes; resolved via temporary stash and rebase conflict resolution.",
+    "clawhub publish . --no-input failed: --version must be valid semver"
   ],
   "next_action": "Address marketplace trust signal by adding explicit no-network/no-credentials declaration in metadata or release notes, then clean working tree and retry pull/rebase.",
   "last_feedback_digest": {
