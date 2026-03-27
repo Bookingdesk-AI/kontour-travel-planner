@@ -1,72 +1,52 @@
 {
-  "loop": "adaptive-ralph-v2",
-  "updated_at": "2026-03-10T10:58:00-08:00",
-  "strategy": "research",
-  "outcome": "shipped_with_publish_blocker",
-  "progress_delta": 1,
-  "confidence": 0.82,
-  "risk": "low",
-  "blockers": [
-    "Repeated publish blocker (2nd run): clawhub publish ... -> Publish payload: acceptLicenseTerms: invalid value",
-    "Agent Trust Hub findings appear stale against older package snapshot and still report python3 -c interpolation path"
-  ],
-  "next_action": "Research exact ClawHub CLI/API requirement for acceptLicenseTerms field and complete publish of v1.1.2 so ATH/ClawHub can re-scan latest commit.",
-  "last_feedback_digest": {
-    "sources": [
-      "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/agent-trust-hub",
-      "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/socket",
-      "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/snyk",
-      "https://clawhub.ai/skylinehk/kontour-travel-planner"
-    ],
-    "security_verdicts": {
-      "agent_trust_hub": {
-        "verdict": "Fail",
-        "risk": "HIGH",
-        "codes": [
-          "COMMAND_EXECUTION",
-          "REMOTE_CODE_EXECUTION",
-          "PROMPT_INJECTION"
-        ],
-        "analyzed_at": "Mar 9, 2026, 11:12 AM",
-        "note": "Report claims scripts/plan.sh uses python3 -c with unsanitized interpolation."
-      },
-      "socket": {
-        "verdict": "Pass",
-        "risk": "not flagged",
-        "analyzed_at": "Mar 9, 2026, 11:12 AM"
-      },
-      "snyk": {
-        "verdict": "Pass",
-        "risk": "LOW",
-        "analyzed_at": "Mar 9, 2026, 11:12 AM",
-        "note": "No issues detected."
-      },
-      "clawhub": {
-        "verdict": "Suspicious",
-        "risk": "medium confidence",
-        "reason": "Manifest declaration gaps for credentials/network/data-sharing vs scripts and external links",
-        "market_version": "v1.1.0"
-      }
+  "runCount": 2,
+  "publishBlocker": {
+    "signature": null,
+    "count": 0,
+    "lastSeenAt": null
+  },
+  "lastRun": {
+    "at": "2026-03-27T02:31:34-07:00",
+    "branch": "main",
+    "baselineCommit": "e89b25fc1fab5e67f24f80aa35e350260e7f6f41",
+    "commit": "b4426c809513136d95cf60f40bf932db77ca5ae8",
+    "version": "1.1.30",
+    "change": "Hardened export-gmaps input handling by validating lat/lng bounds, sanitizing location names, and limiting total location fan-out.",
+    "publish": {
+      "status": "success",
+      "version": "1.1.30",
+      "mode": "clawhub publish --version 1.1.30 --changelog"
     },
-    "issue_candidates": [
+    "refresh": {
+      "status": "success",
+      "command": "npx -y skills add https://github.com/Bookingdesk-AI/kontour-travel-planner --skill kontour-travel-planner --yes"
+    },
+    "pre": {
+      "skillsVersion": null,
+      "clawhubVersion": "1.1.29",
+      "athRisk": "SAFE",
+      "athReason": "User input in plan.sh is validated against a strict character whitelist before being passed to the planning logic, mitigating injection risks.",
+      "socketPass": true,
+      "snykRisk": "LOW"
+    },
+    "post": {
+      "skillsVersion": null,
+      "clawhubVersion": "1.1.30",
+      "athRisk": "SAFE",
+      "athReason": "User input in plan.sh is validated against a strict character whitelist before being passed to the planning logic, mitigating injection risks.",
+      "socketPass": true,
+      "snykRisk": "LOW"
+    },
+    "athReasonChanged": false,
+    "phaseGuardProof": [
       {
-        "type": "packaging",
-        "severity": "high",
-        "confidence": 0.96,
-        "summary": "Marketplace still serves/scans older v1.1.0 while repo has newer security fixes; publish pipeline blocker prevents trust flag refresh."
+        "phase": "precheck",
+        "commit": "1abb7d10ce142370710720fd5144107db7df4a65"
       },
       {
-        "type": "docs",
-        "severity": "medium",
-        "confidence": 0.9,
-        "summary": "Manifest alignment gap explicitly called out by ClawHub scanner."
+        "phase": "enhancement",
+        "commit": "b4426c809513136d95cf60f40bf932db77ca5ae8"
       }
-    ],
-    "applied_issue": {
-      "type": "docs",
-      "severity": "medium",
-      "confidence": 0.9,
-      "summary": "Updated SKILL frontmatter to version 1.1.2 and added explicit manifest metadata: license MIT-0, runtime network none, credentials_required false, writes_files true."
-    }
+    ]
   }
 }
