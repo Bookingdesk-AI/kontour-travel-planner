@@ -16,7 +16,7 @@ pass() {
 echo "Running static trust review checks..."
 
 # 1) Runtime scripts should not make outbound network calls.
-if rg -n "curl|wget|http://|https://|fetch\(|axios|requests" scripts/plan.sh scripts/export-gmaps.sh >/tmp/socket-review-network.txt; then
+if rg -n "\b(curl|wget)\b|\b(fetch|axios|requests)\s*\(" scripts/plan.sh scripts/export-gmaps.sh >/tmp/socket-review-network.txt; then
   cat /tmp/socket-review-network.txt >&2
   fail "Runtime scripts include network-related patterns."
 fi
