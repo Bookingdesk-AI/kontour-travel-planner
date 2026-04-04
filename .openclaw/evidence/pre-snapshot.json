@@ -1,0 +1,35 @@
+{
+  "capturedAt": "2026-04-04T03:09:36.099851+00:00",
+  "source1_skills_listing": {
+    "url": "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner",
+    "skillsVersion": null,
+    "repo": "bookingdesk-ai/kontour-travel-planner",
+    "securityBadges": {
+      "agentTrustHub": "Pass",
+      "socket": "Pass",
+      "snyk": "Pass"
+    }
+  },
+  "source2_agent_trust_hub": {
+    "url": "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/agent-trust-hub",
+    "risk": "SAFE",
+    "reason": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities."
+  },
+  "source3_socket": {
+    "url": "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/socket",
+    "pass": true,
+    "packageUrl": "pkg:socket/skills-sh/Bookingdesk-AI%2Fkontour-travel-planner%2Fkontour-travel-planner%2F@165566c331ccce72eb92b66c80e9c67c4bfa6b4e"
+  },
+  "source4_snyk": {
+    "url": "https://skills.sh/bookingdesk-ai/kontour-travel-planner/kontour-travel-planner/security/snyk",
+    "risk": "LOW",
+    "summary": "No issues detected."
+  },
+  "source5_clawhub": {
+    "url": "https://clawhub.ai/skylinehk/kontour-travel-planner",
+    "version": "1.1.56",
+    "flag": "suspicious",
+    "reasonCode": "suspicious.llm_suspicious",
+    "license": "MIT-0"
+  }
+}
