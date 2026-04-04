@@ -1,21 +1,24 @@
 {
-  "runCount": 2,
+  "runCount": 3,
   "publishBlocker": {
     "signature": null,
     "count": 0,
-    "lastSeenAt": null
+    "lastSeenAt": null,
+    "retryEveryRuns": 3
   },
   "lastRun": {
-    "at": "2026-03-27T02:31:34-07:00",
+    "at": "2026-04-04T03:14:38.589362+00:00",
     "branch": "main",
-    "baselineCommit": "e89b25fc1fab5e67f24f80aa35e350260e7f6f41",
-    "commit": "b4426c809513136d95cf60f40bf932db77ca5ae8",
-    "version": "1.1.30",
-    "change": "Hardened export-gmaps input handling by validating lat/lng bounds, sanitizing location names, and limiting total location fan-out.",
+    "baselineCommit": "165566c331ccce72eb92b66c80e9c67c4bfa6b4e",
+    "commit": "739a9f8eec4ff6c53cbd15fce788131edca85ebd",
+    "version": "1.1.57",
+    "change": "Added scripts/socket-review-check.sh and linked it in SKILL.md; tightened static network pattern scan for reviewer trust evidence.",
     "publish": {
       "status": "success",
-      "version": "1.1.30",
-      "mode": "clawhub publish --version 1.1.30 --changelog"
+      "version": "1.1.57",
+      "mode": "clawhub publish --version 1.1.57 --changelog",
+      "firstAttemptError": "SKILL.md required",
+      "publishedId": "k973srcebxg76egg0087q3xzjs8464cb"
     },
     "refresh": {
       "status": "success",
@@ -23,30 +26,69 @@
     },
     "pre": {
       "skillsVersion": null,
-      "clawhubVersion": "1.1.29",
+      "clawhubVersion": "1.1.56",
       "athRisk": "SAFE",
-      "athReason": "User input in plan.sh is validated against a strict character whitelist before being passed to the planning logic, mitigating injection risks.",
+      "athReason": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
       "socketPass": true,
-      "snykRisk": "LOW"
+      "snykRisk": "LOW",
+      "clawhubFlag": "suspicious",
+      "clawhubReason": "suspicious.llm_suspicious"
     },
     "post": {
       "skillsVersion": null,
-      "clawhubVersion": "1.1.30",
+      "clawhubVersion": "1.1.57",
       "athRisk": "SAFE",
-      "athReason": "User input in plan.sh is validated against a strict character whitelist before being passed to the planning logic, mitigating injection risks.",
+      "athReason": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
       "socketPass": true,
-      "snykRisk": "LOW"
+      "snykRisk": "LOW",
+      "clawhubFlag": "clean",
+      "clawhubReason": null
     },
     "athReasonChanged": false,
+    "listingVersionChanged": false,
+    "clawhubVersionChanged": true,
     "phaseGuardProof": [
       {
-        "phase": "precheck",
-        "commit": "1abb7d10ce142370710720fd5144107db7df4a65"
+        "phase": "A",
+        "commit": "7f30130f12d2eb8e7e1f934855f692e6afbafcee",
+        "pushTarget": "origin/main"
       },
       {
-        "phase": "enhancement",
-        "commit": "b4426c809513136d95cf60f40bf932db77ca5ae8"
+        "phase": "B",
+        "commit": "e32b1cd69f036fec0c9784ca90c862fe5ac71db9",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "C",
+        "commit": "d362238937f24304d608641895c0d79e75f44a30",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "D",
+        "commit": "c70c58ec760ec0511462257bc051a48d8f4e8545",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "E",
+        "commit": "279371559970f8bb696962a719b39f093bc16b48",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "F",
+        "commit": "5bc2962bc7bc7820b17d5e0f7f2c73cc068ef52a",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "G",
+        "commit": "b288e4d13c4f856fd10866a3ca60e3e8b29f4576",
+        "pushTarget": "origin/main"
+      },
+      {
+        "phase": "H",
+        "commit": "739a9f8eec4ff6c53cbd15fce788131edca85ebd",
+        "pushTarget": "origin/main"
       }
-    ]
+    ],
+    "blockers": []
   }
 }
