@@ -1,0 +1,21 @@
+{
+  "listingVersionChanged": false,
+  "clawhubVersionChanged": true,
+  "clawhubVersionPre": "1.1.56",
+  "clawhubVersionPost": "1.1.57",
+  "athReasonChanged": false,
+  "athReasonPre": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
+  "athReasonPost": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
+  "socketPackageChanged": false,
+  "socketPackagePre": "pkg:socket/skills-sh/Bookingdesk-AI%2Fkontour-travel-planner%2Fkontour-travel-planner%2F@165566c331ccce72eb92b66c80e9c67c4bfa6b4e",
+  "socketPackagePost": "pkg:socket/skills-sh/Bookingdesk-AI%2Fkontour-travel-planner%2Fkontour-travel-planner%2F@165566c331ccce72eb92b66c80e9c67c4bfa6b4e",
+  "snykRiskChanged": false,
+  "snykRiskPre": "LOW",
+  "snykRiskPost": "LOW",
+  "clawhubFlagChanged": true,
+  "clawhubFlagPre": "suspicious",
+  "clawhubFlagPost": "clean",
+  "clawhubReasonChanged": true,
+  "clawhubReasonPre": "suspicious.llm_suspicious",
+  "clawhubReasonPost": null
+}
