@@ -13,21 +13,26 @@ pass() {
   echo "[PASS] $1"
 }
 
+SCAN_TARGETS=(scripts/plan.sh scripts/export-gmaps.sh scripts/gen-airports.py)
+
+NETWORK_RAW_SOCKET_PATTERN='\bcurl\b|\bwget\b|\bfetch\s*\(|\baxios\s*\(|\brequests\.(get|post|put|delete|request)\b|\burllib\.(request|urlopen)\b|\bhttpx\.(get|post|put|delete|request|Client|AsyncClient)\b|\b(nc|netcat|ncat|socat|telnet)\b|/dev/tcp/|\bimport\s+socket\b|\bfrom\s+socket\s+import\b|socket\.socket\('
+DYNAMIC_EXEC_PATTERN='eval\(|\beval\b|bash -c|sh -c|source <\(|os\.system|subprocess\.|exec\('
+
 echo "Running static trust review checks..."
 
-# 1) Runtime scripts should not make outbound network calls.
-if rg -n "\b(curl|wget)\b|\b(fetch|axios|requests)\s*\(" scripts/plan.sh scripts/export-gmaps.sh >/tmp/socket-review-network.txt; then
+# 1) Runtime/generator scripts should not make outbound network calls or raw socket use.
+if rg -n "$NETWORK_RAW_SOCKET_PATTERN" "${SCAN_TARGETS[@]}" >/tmp/socket-review-network.txt; then
   cat /tmp/socket-review-network.txt >&2
-  fail "Runtime scripts include network-related patterns."
+  fail "Runtime/generator scripts include network-client or raw-socket patterns."
 fi
-pass "Runtime scripts contain no network-client patterns."
+pass "Runtime/generator scripts contain no network-client or raw-socket patterns."
 
 # 2) Runtime scripts should avoid dynamic command execution primitives.
-if rg -n "eval\(|\beval\b|bash -c|sh -c|source <\(|os\.system|subprocess\.|exec\(" scripts/plan.sh scripts/export-gmaps.sh >/tmp/socket-review-exec.txt; then
+if rg -n "$DYNAMIC_EXEC_PATTERN" "${SCAN_TARGETS[@]}" >/tmp/socket-review-exec.txt; then
   cat /tmp/socket-review-exec.txt >&2
-  fail "Runtime scripts include dynamic execution patterns."
+  fail "Runtime/generator scripts include dynamic execution patterns."
 fi
-pass "Runtime scripts contain no dynamic execution primitives."
+pass "Runtime/generator scripts contain no dynamic execution primitives."
 
 # 3) Ensure publish metadata keeps the approved license.
 if ! rg -n "^license:\s*MIT-0$" SKILL.md >/dev/null; then

@@ -35,6 +35,11 @@
       "clawhubFlag": "suspicious",
       "clawhubReason": "suspicious.llm_suspicious"
     },
-    "preEvidence": ".openclaw/evidence/ralph-precheck-20260405T005922Z.md"
+    "preEvidence": ".openclaw/evidence/ralph-precheck-20260405T005922Z.md",
+    "phaseC": {
+      "enhancement": "Hardened socket/network static review to cover raw socket primitives and generator script; added explicit raw-socket transparency doc line.",
+      "targetUnresolvedReason": "Socket anomaly ambiguity around standalone socket pass evidence"
+    },
+    "change": "Expanded socket/network hardening checks and security transparency wording to address Socket anomaly ambiguity."
   }
 }
