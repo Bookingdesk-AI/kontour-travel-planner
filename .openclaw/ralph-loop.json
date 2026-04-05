@@ -1,5 +1,5 @@
 {
-  "runCount": 3,
+  "runCount": 4,
   "publishBlocker": {
     "signature": null,
     "count": 0,
@@ -7,88 +7,15 @@
     "retryEveryRuns": 3
   },
   "lastRun": {
-    "at": "2026-04-04T03:14:38.589362+00:00",
-    "branch": "main",
-    "baselineCommit": "165566c331ccce72eb92b66c80e9c67c4bfa6b4e",
-    "commit": "739a9f8eec4ff6c53cbd15fce788131edca85ebd",
+    "at": "2026-04-05T00:58:26+00:00",
+    "branch": "cron/ralph-20260404-1753",
+    "upstream": null,
+    "baselineCommit": "d18b3f53526f6b45223c7400fc1e7554de33f35c",
     "version": "1.1.57",
-    "change": "Added scripts/socket-review-check.sh and linked it in SKILL.md; tightened static network pattern scan for reviewer trust evidence.",
-    "publish": {
-      "status": "success",
-      "version": "1.1.57",
-      "mode": "clawhub publish --version 1.1.57 --changelog",
-      "firstAttemptError": "SKILL.md required",
-      "publishedId": "k973srcebxg76egg0087q3xzjs8464cb"
+    "phaseA": {
+      "gitPullRebase": "already-up-to-date",
+      "stateRead": true
     },
-    "refresh": {
-      "status": "success",
-      "command": "npx -y skills add https://github.com/Bookingdesk-AI/kontour-travel-planner --skill kontour-travel-planner --yes"
-    },
-    "pre": {
-      "skillsVersion": null,
-      "clawhubVersion": "1.1.56",
-      "athRisk": "SAFE",
-      "athReason": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
-      "socketPass": true,
-      "snykRisk": "LOW",
-      "clawhubFlag": "suspicious",
-      "clawhubReason": "suspicious.llm_suspicious"
-    },
-    "post": {
-      "skillsVersion": null,
-      "clawhubVersion": "1.1.57",
-      "athRisk": "SAFE",
-      "athReason": "The skill operates entirely offline using bundled JSON reference data for destinations, airports, and activities.",
-      "socketPass": true,
-      "snykRisk": "LOW",
-      "clawhubFlag": "clean",
-      "clawhubReason": null
-    },
-    "athReasonChanged": false,
-    "listingVersionChanged": false,
-    "clawhubVersionChanged": true,
-    "phaseGuardProof": [
-      {
-        "phase": "A",
-        "commit": "7f30130f12d2eb8e7e1f934855f692e6afbafcee",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "B",
-        "commit": "e32b1cd69f036fec0c9784ca90c862fe5ac71db9",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "C",
-        "commit": "d362238937f24304d608641895c0d79e75f44a30",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "D",
-        "commit": "c70c58ec760ec0511462257bc051a48d8f4e8545",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "E",
-        "commit": "279371559970f8bb696962a719b39f093bc16b48",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "F",
-        "commit": "5bc2962bc7bc7820b17d5e0f7f2c73cc068ef52a",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "G",
-        "commit": "b288e4d13c4f856fd10866a3ca60e3e8b29f4576",
-        "pushTarget": "origin/main"
-      },
-      {
-        "phase": "H",
-        "commit": "739a9f8eec4ff6c53cbd15fce788131edca85ebd",
-        "pushTarget": "origin/main"
-      }
-    ],
-    "blockers": []
+    "phaseGuardProof": []
   }
 }
