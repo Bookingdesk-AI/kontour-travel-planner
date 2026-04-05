@@ -16,6 +16,25 @@
       "gitPullRebase": "already-up-to-date",
       "stateRead": true
     },
-    "phaseGuardProof": []
+    "phaseGuardProof": [],
+    "pre": {
+      "skillsVersion": null,
+      "skillsCards": {
+        "ath": "Pass",
+        "socket": "Warn",
+        "snyk": "Pass"
+      },
+      "athRisk": "SAFECOMMAND_EXECUTION",
+      "athReason": "command execution surface noted; whitelist in plan.sh reduces shell injection risk",
+      "socketVerdict": "AnomalyLOW",
+      "socketReason": "Socket pass evidence wording considered ambiguous; code-level socket/network review requested",
+      "snykRisk": "LOW",
+      "snykPass": true,
+      "clawhubVersion": "1.1.59",
+      "clawhubStaticScan": "clean",
+      "clawhubFlag": "suspicious",
+      "clawhubReason": "suspicious.llm_suspicious"
+    },
+    "preEvidence": ".openclaw/evidence/ralph-precheck-20260405T005922Z.md"
   }
 }
