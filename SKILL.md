@@ -65,7 +65,7 @@ Every trip is tracked across 9 weighted dimensions:
 | **Interests** | 10 | Activities, themes (adventure, food, culture, relaxation) |
 | **Accommodation** | 10 | Hotel, hostel, Airbnb, resort, boutique |
 | **Transport** | 5 | Flights, trains, rental car, public transit |
-| **Constraints** | 5 | Dietary, accessibility, pace, weather, visa |
+| **Constraints** | 5 | Budget cap, trip pace, neighborhood preference, opening-hours sensitivity, food preference, weather sensitivity, accessibility, visa |
 
 Each dimension has a score (0-1) and status (missing/partial/complete). Overall progress = weighted sum.
 
@@ -88,6 +88,18 @@ Progress determines the current stage. Each stage prioritizes different dimensio
 **Confirm (85-100%)** — Finalize
 - Priority: constraints → transport → accommodation
 - Goal: Validate, detect conflicts, produce final itinerary
+
+
+### Constraint Capture
+
+When a traveler gives natural-language preferences, capture explicit constraints instead of leaving them as vague notes:
+
+- **Budget cap** — amount, currency, whether it is total or per-person, and a destination-aware fit analysis when duration/travelers/reference costs are available.
+- **Trip pace** — relaxed, balanced, or packed.
+- **Neighborhood preference** — preferred base area, proximity, or district.
+- **Opening-hours sensitivity** — closed-day risk, late-night/early-morning needs, or must-be-open requirements.
+- **Food preference** — dietary needs and cuisine preferences such as vegetarian, vegan, halal, gluten-free, seafood, or street food.
+- **Weather sensitivity** — rain backups, heat/cold sensitivity, and outdoor/weather-dependent plans.
 
 ### Guided Discovery Protocol
 
@@ -171,6 +183,9 @@ Use these for instant lookups — no API needed for basic planning intelligence.
 ```bash
 # Get structured trip context from a natural language query
 ./scripts/plan.sh "2 weeks in Japan for a couple, mid-range budget, interested in food and temples"
+
+# Capture explicit constraints from casual traveler language
+./scripts/plan.sh '5 days in Tokyo for a couple under $2500 relaxed pace near Shinjuku vegetarian food avoid rainy outdoor plans must be open on Monday'
 ```
 
 ## Off-Topic Handling
