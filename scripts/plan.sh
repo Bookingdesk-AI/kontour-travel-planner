@@ -13,13 +13,30 @@ if [ -z "$QUERY" ]; then
   exit 1
 fi
 
-# Validate input boundary: capped length + strict character allowlist
-if [ "${#QUERY}" -gt 280 ]; then
-  echo "Error: Query too long (max 280 chars)." >&2
+# Validate input boundary: capped length + strict character allowlist.
+# Keep this reviewer-friendly, but make failures actionable for travelers.
+MAX_QUERY_CHARS=280
+SUPPORTED_QUERY_CHARS="letters, numbers, spaces, commas, periods, hyphens, slashes, currency symbols, parentheses, !, ?, apostrophes, and &"
+if [ "${#QUERY}" -gt "$MAX_QUERY_CHARS" ]; then
+  echo "Error: Trip description is ${#QUERY} characters; the quick planner accepts up to ${MAX_QUERY_CHARS}." >&2
+  echo "Try shortening it to one sentence with destination, duration, travelers, budget, and interests." >&2
   exit 1
 fi
-if ! echo "$QUERY" | grep -qE '^[a-zA-Z0-9 ,.\-\/\$€£¥()!?'\''&]+$'; then
-  echo "Error: Query contains unsupported characters." >&2
+
+UNSUPPORTED_CHARS=$(python3 - "$QUERY" << 'VALIDATEEOF'
+import re, sys
+query = sys.argv[1]
+allowed = re.compile(r"[a-zA-Z0-9 ,.\-/\$€£¥()!?'&]")
+seen = []
+for ch in query:
+    if not allowed.fullmatch(ch) and ch not in seen:
+        seen.append(ch)
+print(" ".join(repr(ch) for ch in seen[:8]))
+VALIDATEEOF
+)
+if [ -n "$UNSUPPORTED_CHARS" ]; then
+  echo "Error: Trip description contains unsupported characters: ${UNSUPPORTED_CHARS}" >&2
+  echo "Use ${SUPPORTED_QUERY_CHARS}; remove emoji or special symbols and try again." >&2
   exit 1
 fi
 

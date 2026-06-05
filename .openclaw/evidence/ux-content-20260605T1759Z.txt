@@ -1,0 +1,57 @@
+## unsupported emoji
+Error: Trip description contains unsupported characters: '😊'
+Use letters, numbers, spaces, commas, periods, hyphens, slashes, currency symbols, parentheses, !, ?, apostrophes, and &; remove emoji or special symbols and try again.
+
+## unsupported colon
+Error: Trip description contains unsupported characters: ':'
+Use letters, numbers, spaces, commas, periods, hyphens, slashes, currency symbols, parentheses, !, ?, apostrophes, and &; remove emoji or special symbols and try again.
+
+## overlength
+Error: Trip description is 360 characters; the quick planner accepts up to 280.
+Try shortening it to one sentence with destination, duration, travelers, budget, and interests.
+
+## valid smoke
+{
+  "destination": {
+    "name": "Tokyo",
+    "country": "Japan",
+    "coordinates": [
+      35.6762,
+      139.6503
+    ],
+    "currency": "JPY",
+    "timezone": "Asia/Tokyo",
+    "avg_daily_cost_usd": {
+      "budget": 62,
+      "mid": 175,
+      "luxury": 510
+    }
+  },
+  "duration_days": 4,
+  "travelers": {
+    "adults": 2
+  },
+  "budget": {
+    "tier": "mid",
+    "estimated_total": 1400,
+    "daily_per_person": 175
+  },
+  "interests": [
+    "food",
+    "temple"
+  ],
+  "planning_stage": "develop",
+  "open_decisions": [
+    "accommodation",
+    "transport",
+    "constraints"
+  ]
+}
+
+## static trust smoke
+Running static trust review checks...
+[PASS] Runtime/generator scripts contain no network-client or raw-socket patterns.
+[PASS] Runtime/generator scripts contain no dynamic execution primitives.
+[PASS] SKILL.md license remains MIT-0.
+[PASS] No obvious credential patterns detected.
+All static trust review checks passed.
