@@ -54,9 +54,25 @@ dest_file = sys.argv[2]
 def extract_destination(text):
     m = re.search(r'\b(?:in|to|visit|visiting|explore|exploring)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)', text)
     if m:
-        dest = re.sub(r'\s+[Ff]or$', '', m.group(1))
+        dest = re.sub(r'\s+(?:[Ff]or|[Ii]n|[Dd]uring|[Tt]his|[Nn]ext)$', '', m.group(1))
         return dest
     return ""
+
+def resolve_destination(text, dest_name, destinations):
+    if not destinations:
+        return None
+    candidates = []
+    t = text.lower()
+    if dest_name:
+        d = dest_name.lower()
+        candidates.extend([item for item in destinations if item['name'].lower() == d or item['country'].lower() == d])
+    if not candidates:
+        for item in destinations:
+            names = {item['name'].lower(), item['country'].lower()}
+            if any(re.search(rf'\b{re.escape(name)}\b', t) for name in names):
+                candidates.append(item)
+                break
+    return candidates[0] if candidates else None
 
 def extract_duration(text):
     m = re.search(r'(\d+)\s*(days?|weeks?|nights?)', text, re.IGNORECASE)
@@ -83,6 +99,50 @@ def extract_budget_tier(text):
     if re.search(r'luxury|premium|high.end|splurge', t): return "luxury"
     return ""
 
+def extract_seasonality(text):
+    t = text.lower()
+    seasons = {
+        'spring': [3, 4, 5],
+        'summer': [6, 7, 8],
+        'fall': [9, 10, 11],
+        'autumn': [9, 10, 11],
+        'winter': [12, 1, 2],
+    }
+    for season, months in seasons.items():
+        if re.search(rf'\b{season}\b', t):
+            canonical = 'fall' if season == 'autumn' else season
+            return {'type': 'season', 'value': canonical, 'months': months}
+
+    month_names = {
+        'january': 1, 'jan': 1, 'february': 2, 'feb': 2, 'march': 3, 'mar': 3,
+        'april': 4, 'apr': 4, 'may': 5, 'june': 6, 'jun': 6, 'july': 7, 'jul': 7,
+        'august': 8, 'aug': 8, 'september': 9, 'sep': 9, 'sept': 9, 'october': 10,
+        'oct': 10, 'november': 11, 'nov': 11, 'december': 12, 'dec': 12,
+    }
+    for name, month in month_names.items():
+        if re.search(rf'\b{name}\b', t):
+            return {'type': 'month', 'value': name, 'months': [month]}
+    return None
+
+def season_fit(seasonality, dest_data):
+    if not seasonality or not dest_data:
+        return None
+    best = set(dest_data.get('best_months', []))
+    requested = set(seasonality.get('months', []))
+    if not best or not requested:
+        return None
+    overlap = len(best & requested)
+    if overlap == len(requested):
+        verdict = 'strong'
+        evidence = "requested timing is fully inside the destination's bundled best-month window"
+    elif overlap:
+        verdict = 'mixed'
+        evidence = "requested timing partially overlaps the destination's bundled best-month window"
+    else:
+        verdict = 'weak'
+        evidence = "requested timing sits outside the destination's bundled best-month window"
+    return {'verdict': verdict, 'best_months': sorted(best), 'evidence': evidence}
+
 def extract_interests(text):
     keywords = ['food', 'culinary', 'temple', 'culture', 'history', 'museum', 'art',
                 'beach', 'adventure', 'hiking', 'nature', 'nightlife', 'shopping',
@@ -94,17 +154,18 @@ dest = extract_destination(query)
 duration = extract_duration(query)
 travelers = extract_travelers(query)
 budget_tier = extract_budget_tier(query)
+seasonality = extract_seasonality(query)
 interests = extract_interests(query)
 
 ctx = {}
 
 # Look up destination in references
 dest_data = None
-if dest and os.path.isfile(dest_file):
+dests = []
+if os.path.isfile(dest_file):
     with open(dest_file) as f:
         dests = json.load(f)
-    dest_lower = dest.lower()
-    dest_data = next((d for d in dests if d['name'].lower() == dest_lower or d['country'].lower() == dest_lower), None)
+    dest_data = resolve_destination(query, dest, dests)
 
 if dest_data:
     ctx['destination'] = {
@@ -120,6 +181,8 @@ elif dest:
 
 if duration:
     ctx['duration_days'] = duration
+if seasonality:
+    ctx['dates'] = {'flexible': True, 'timing': seasonality}
 if travelers:
     ctx['travelers'] = {'adults': travelers}
 if budget_tier:
@@ -133,7 +196,11 @@ if budget_tier:
 if interests:
     ctx['interests'] = interests
 
-dims_complete = sum(1 for v in [dest, duration, travelers, budget_tier, interests] if v)
+timing_fit = season_fit(seasonality, dest_data)
+if timing_fit:
+    ctx.setdefault('constraints', {})['seasonality'] = timing_fit
+
+dims_complete = sum(1 for v in [dest, duration or seasonality, travelers, budget_tier, interests] if v)
 if dims_complete >= 6:
     ctx['planning_stage'] = 'refine'
 elif dims_complete >= 4:
@@ -143,7 +210,8 @@ else:
 
 ctx['open_decisions'] = []
 if not dest: ctx['open_decisions'].append('destination')
-if not duration: ctx['open_decisions'].append('dates/duration')
+if not duration and not seasonality: ctx['open_decisions'].append('dates/duration')
+elif not duration: ctx['open_decisions'].append('duration')
 if not travelers: ctx['open_decisions'].append('travelers')
 if not budget_tier: ctx['open_decisions'].append('budget')
 if not interests: ctx['open_decisions'].append('interests')
