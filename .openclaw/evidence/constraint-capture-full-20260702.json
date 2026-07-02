@@ -1,0 +1,77 @@
+{
+  "destination": {
+    "name": "Tokyo",
+    "country": "Japan",
+    "coordinates": [
+      35.6762,
+      139.6503
+    ],
+    "currency": "JPY",
+    "timezone": "Asia/Tokyo",
+    "avg_daily_cost_usd": {
+      "budget": 62,
+      "mid": 175,
+      "luxury": 510
+    }
+  },
+  "duration_days": 5,
+  "travelers": {
+    "adults": 2
+  },
+  "budget": {
+    "cap": {
+      "amount": 2500,
+      "currency": "USD",
+      "scope": "total"
+    },
+    "cap_fit": {
+      "status": "fits",
+      "best_matching_tier": "mid",
+      "tier_totals_usd": {
+        "budget": 620,
+        "mid": 1750,
+        "luxury": 5100
+      }
+    }
+  },
+  "constraints": {
+    "budget_cap": {
+      "amount": 2500,
+      "currency": "USD",
+      "scope": "total"
+    },
+    "trip_pace": "relaxed",
+    "neighborhood_preference": "Shinjuku",
+    "opening_hours_sensitivity": [
+      "must_verify_open",
+      "open_on_monday"
+    ],
+    "food_preference": [
+      "vegetarian"
+    ],
+    "weather_sensitivity": [
+      "rain_sensitive",
+      "needs_indoor_backup"
+    ]
+  },
+  "constraint_capture": {
+    "captured": [
+      "budget_cap",
+      "trip_pace",
+      "neighborhood_preference",
+      "opening_hours_sensitivity",
+      "food_preference",
+      "weather_sensitivity"
+    ],
+    "missing": [],
+    "complete": true
+  },
+  "interests": [
+    "food"
+  ],
+  "planning_stage": "refine",
+  "open_decisions": [
+    "accommodation",
+    "transport"
+  ]
+}

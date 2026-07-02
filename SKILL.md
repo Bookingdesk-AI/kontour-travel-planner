@@ -101,6 +101,8 @@ When a traveler gives natural-language preferences, capture explicit constraints
 - **Food preference** — dietary needs and cuisine preferences such as vegetarian, vegan, halal, gluten-free, seafood, or street food.
 - **Weather sensitivity** — rain backups, heat/cold sensitivity, and outdoor/weather-dependent plans.
 
+The quick planner also emits a `constraint_capture` audit object with captured/missing constraint fields and one next-best follow-up question, so operators can see whether the six explicit constraint categories were understood before itinerary generation.
+
 ### Guided Discovery Protocol
 
 **Rules:**

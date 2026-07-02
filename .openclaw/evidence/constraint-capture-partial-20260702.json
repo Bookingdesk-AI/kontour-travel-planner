@@ -1,0 +1,45 @@
+{
+  "destination": {
+    "name": "Paris",
+    "country": "France",
+    "coordinates": [
+      48.8566,
+      2.3522
+    ],
+    "currency": "EUR",
+    "timezone": "Europe/Paris",
+    "avg_daily_cost_usd": {
+      "budget": 85,
+      "mid": 230,
+      "luxury": 650
+    }
+  },
+  "duration_days": 3,
+  "travelers": {
+    "adults": 2
+  },
+  "constraint_capture": {
+    "captured": [],
+    "missing": [
+      "budget_cap",
+      "trip_pace",
+      "neighborhood_preference",
+      "opening_hours_sensitivity",
+      "food_preference",
+      "weather_sensitivity"
+    ],
+    "complete": false,
+    "next_question": "What total or per-person budget cap should I stay under?"
+  },
+  "interests": [
+    "food",
+    "museum"
+  ],
+  "planning_stage": "develop",
+  "open_decisions": [
+    "budget",
+    "accommodation",
+    "transport",
+    "constraints"
+  ]
+}

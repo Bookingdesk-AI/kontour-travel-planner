@@ -158,6 +158,24 @@ def extract_weather_sensitivity(text):
         signals.append('weather_dependent')
     return signals
 
+CONSTRAINT_FIELDS = [
+    'budget_cap',
+    'trip_pace',
+    'neighborhood_preference',
+    'opening_hours_sensitivity',
+    'food_preference',
+    'weather_sensitivity',
+]
+
+CONSTRAINT_QUESTIONS = {
+    'budget_cap': 'What total or per-person budget cap should I stay under?',
+    'trip_pace': 'Should the trip feel relaxed, balanced, or packed?',
+    'neighborhood_preference': 'Any preferred base neighborhood or area to stay near?',
+    'opening_hours_sensitivity': 'Are there specific days or times when places must be open?',
+    'food_preference': 'Any dietary or cuisine preferences I should honor?',
+    'weather_sensitivity': 'Should I add indoor backups or avoid heat, cold, or rain exposure?',
+}
+
 def extract_constraints(text):
     constraints = {}
     budget_cap = extract_budget_cap(text)
@@ -179,6 +197,18 @@ def extract_constraints(text):
     if weather:
         constraints['weather_sensitivity'] = weather
     return constraints
+
+def build_constraint_capture(constraints):
+    captured = [field for field in CONSTRAINT_FIELDS if field in constraints]
+    missing = [field for field in CONSTRAINT_FIELDS if field not in constraints]
+    result = {
+        'captured': captured,
+        'missing': missing,
+        'complete': not missing,
+    }
+    if missing:
+        result['next_question'] = CONSTRAINT_QUESTIONS[missing[0]]
+    return result
 
 def extract_interests(text):
     keywords = ['food', 'culinary', 'temple', 'culture', 'history', 'museum', 'art',
@@ -246,6 +276,7 @@ if budget_tier or constraints.get('budget_cap'):
                 ctx['budget']['cap_fit'] = {'status': 'tight', 'lowest_tier_total_usd': min(tier_totals.values()) if tier_totals else None, 'tier_totals_usd': tier_totals}
 if constraints:
     ctx['constraints'] = constraints
+ctx['constraint_capture'] = build_constraint_capture(constraints)
 if interests:
     ctx['interests'] = interests
 
