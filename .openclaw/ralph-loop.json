@@ -1,5 +1,5 @@
 {
-  "runCount": 4,
+  "runCount": 5,
   "publishBlocker": {
     "signature": null,
     "count": 0,
@@ -7,32 +7,41 @@
     "retryEveryRuns": 3
   },
   "lastRun": {
-    "at": "2026-06-04T12:46:00Z",
-    "branch": "cron/kontour-ralph-20260604-0546",
-    "baselineCommit": "d18b3f53526f6b45223c7400fc1e7554de33f35c",
-    "commit": "153c9b42cd2db0da79bccaa4413f80918139a890",
-    "version": "1.1.57",
-    "change": "Ladder A constraint capture upgrade: plan.sh now extracts budget cap, trip pace, neighborhood preference, opening-hours sensitivity, food preference, and weather sensitivity into structured JSON.",
-    "selectedFeatureSlice": "A. Constraint capture upgrade",
+    "at": "2026-07-03T13:13:19Z",
+    "branch": "cron/kontour-ralph-20260702-constraint-capture",
+    "baselineCommit": "ecc060f",
+    "commit": "6fc0482fa3556bb92b9cd3d74c2dc7e2fe91dbe7",
+    "version": "2.0.12",
+    "change": "Ladder B candidate scoring explanations: plan.sh now emits candidate_explanations for destination highlights with concrete factors such as thematic fit, budget fit, rating signal, distance/base fit, hours, and weather backup needs.",
+    "selectedFeatureSlice": "B. Candidate scoring explanations",
     "verification": [
-      "Feature smoke: explicit constraint query produced expected budget.cap, cap_fit, trip_pace, neighborhood_preference, opening_hours_sensitivity, food_preference, and weather_sensitivity fields.",
-      "Static trust smoke: scripts/socket-review-check.sh passed."
+      "bash -n scripts/plan.sh",
+      "./scripts/plan.sh '5 days in Tokyo for a couple under $2500 relaxed pace near Shinjuku vegetarian food avoid rainy outdoor plans must be open on Monday' > .openclaw/evidence/candidate-explanations-20260703.json",
+      "Python assertion verified at least 3 candidate_explanations and at least 2 factors per candidate.",
+      "./scripts/socket-review-check.sh passed before commit and again before publish."
     ],
     "phaseGuardProof": [
       {
-        "phase": "A-preflight",
-        "commit": "a2165de21e589f1a3804c863675642ebb179a22d",
-        "pushTarget": "origin/cron/kontour-ralph-20260604-0546"
+        "phase": "B-feature",
+        "commit": "3eb6ba1314b47d266ecb4f30531f14bb3007d0c7",
+        "pushTarget": "origin/cron/kontour-ralph-20260702-constraint-capture"
       },
       {
-        "phase": "B-feature",
-        "commit": "153c9b42cd2db0da79bccaa4413f80918139a890",
-        "pushTarget": "origin/cron/kontour-ralph-20260604-0546"
+        "phase": "release-publish-prep",
+        "commit": "6fc0482fa3556bb92b9cd3d74c2dc7e2fe91dbe7",
+        "pushTarget": "origin/cron/kontour-ralph-20260702-constraint-capture"
       }
     ],
-    "blockers": [
-      "Existing strict query allowlist rejected a baseline example with punctuation; left as next narrow fix instead of expanding this feature slice."
-    ],
-    "nextSpecificFeature": "Finish any input-gate/doc mismatch for allowed example text, then proceed to B. Candidate scoring explanations."
+    "publish": {
+      "canonicalSlug": "travel-planner-notion-ai-obsidian-kontour-integration",
+      "aliasInspected": "kontour-travel-planner",
+      "owner": "skylinehk",
+      "version": "2.0.12",
+      "updated": "2026-07-03T13:13:19.460Z",
+      "moderation": "CLEAN",
+      "publishedId": "k971f7trgtkx7v8q6mbqttb3z189tx2c"
+    },
+    "blockers": [],
+    "nextSpecificFeature": "C. Day-plan continuity feature: add transition rationale and reduce morning/afternoon/evening backtracking."
   }
 }
