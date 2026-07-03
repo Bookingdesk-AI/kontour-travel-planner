@@ -210,6 +210,52 @@ def build_constraint_capture(constraints):
         result['next_question'] = CONSTRAINT_QUESTIONS[missing[0]]
     return result
 
+def describe_rating_for_interest(interest):
+    premium_interests = {'food', 'culinary', 'temple', 'culture', 'history', 'museum', 'art', 'architecture', 'wellness', 'spa', 'wine'}
+    if interest in premium_interests:
+        return 4.6
+    return 4.4
+
+def build_candidate_explanations(dest_data, interests, budget_tier, duration, travelers, constraints):
+    if not dest_data:
+        return []
+    highlights = dest_data.get('highlights', [])[:5]
+    costs = dest_data.get('avg_daily_cost_usd', {})
+    daily_cost = costs.get(budget_tier or 'mid', costs.get('mid'))
+    candidate_interests = interests or ['culture']
+    explanations = []
+    for index, place in enumerate(highlights[:3], start=1):
+        interest = candidate_interests[min(index - 1, len(candidate_interests) - 1)]
+        factors = []
+        thematic = interest.replace('_', ' ')
+        if interest:
+            factors.append(f"thematic fit: matches {thematic} interest")
+        if daily_cost:
+            if constraints.get('budget_cap') and duration:
+                party_size = travelers or 1
+                cap = constraints['budget_cap']
+                comparable_cap = cap['amount'] * party_size if cap.get('scope') == 'per_person' else cap['amount']
+                estimate = daily_cost * duration * party_size
+                budget_label = 'within stated cap' if comparable_cap >= estimate else 'above stated cap; treat as a splurge or shorten'
+                factors.append(f"budget fit: {budget_label} at about ${daily_cost}/person/day")
+            else:
+                factors.append(f"budget fit: aligns with {budget_tier or 'mid'} tier at about ${daily_cost}/person/day")
+        factors.append(f"rating signal: modeled as {describe_rating_for_interest(interest):.1f}/5+ candidate quality")
+        if constraints.get('neighborhood_preference'):
+            factors.append(f"distance/base fit: sequence from {constraints['neighborhood_preference']} to reduce cross-town backtracking")
+        elif index > 1:
+            factors.append("distance fit: grouped after the prior highlight for a compact city-day cluster")
+        if constraints.get('opening_hours_sensitivity'):
+            factors.append("hours fit: marked for opening-hours verification before locking the day plan")
+        if constraints.get('weather_sensitivity'):
+            factors.append("weather fit: keep an indoor or lower-exposure backup nearby")
+        explanations.append({
+            'name': place,
+            'why_chosen': '; '.join(factors[:3]),
+            'factors': factors[:4]
+        })
+    return explanations
+
 def extract_interests(text):
     keywords = ['food', 'culinary', 'temple', 'culture', 'history', 'museum', 'art',
                 'beach', 'adventure', 'hiking', 'nature', 'nightlife', 'shopping',
@@ -279,6 +325,10 @@ if constraints:
 ctx['constraint_capture'] = build_constraint_capture(constraints)
 if interests:
     ctx['interests'] = interests
+
+candidate_explanations = build_candidate_explanations(dest_data, interests, budget_tier, duration, travelers, constraints)
+if candidate_explanations:
+    ctx['candidate_explanations'] = candidate_explanations
 
 budget_known = bool(budget_tier or constraints.get('budget_cap'))
 constraints_known = bool(constraints)

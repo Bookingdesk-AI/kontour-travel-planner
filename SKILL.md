@@ -1,7 +1,7 @@
 ---
 name: kontour-travel-planner
 description: Transform any AI agent into a world-class travel planner using Kontour AI's 9-dimension progressive planning model with structured conversation flow.
-version: 1.1.57
+version: 1.1.58
 license: MIT-0
 metadata:
   openclaw:
@@ -102,6 +102,10 @@ When a traveler gives natural-language preferences, capture explicit constraints
 - **Weather sensitivity** — rain backups, heat/cold sensitivity, and outdoor/weather-dependent plans.
 
 The quick planner also emits a `constraint_capture` audit object with captured/missing constraint fields and one next-best follow-up question, so operators can see whether the six explicit constraint categories were understood before itinerary generation.
+
+### Candidate Scoring Explanations
+
+When the quick planner has reference destination highlights, emit a `candidate_explanations` array for the top suggested places. Each explanation must be concise and cite at least two concrete selection factors such as thematic fit, budget fit, modeled rating signal, distance/base fit, opening-hours sensitivity, or weather backup needs. This makes the recommendation layer operator-visible: reviewers can see why a place was suggested before a full itinerary is drafted.
 
 ### Guided Discovery Protocol
 
