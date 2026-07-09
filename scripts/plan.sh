@@ -256,6 +256,115 @@ def build_candidate_explanations(dest_data, interests, budget_tier, duration, tr
         })
     return explanations
 
+
+
+def infer_place_tags(place):
+    name = place.lower()
+    tags = set()
+    keyword_tags = {
+        'market': ['food', 'shopping', 'evening'],
+        'temple': ['culture', 'history', 'morning'],
+        'shrine': ['culture', 'history', 'morning'],
+        'museum': ['culture', 'art', 'indoor', 'afternoon'],
+        'park': ['nature', 'outdoor', 'morning'],
+        'garden': ['nature', 'outdoor', 'morning'],
+        'beach': ['nature', 'outdoor', 'afternoon'],
+        'tower': ['view', 'evening'],
+        'crossing': ['city', 'evening'],
+        'district': ['culture', 'shopping', 'afternoon'],
+        'old town': ['culture', 'history', 'morning'],
+        'castle': ['culture', 'history', 'morning'],
+        'palace': ['culture', 'history', 'morning'],
+        'bazaar': ['shopping', 'food', 'afternoon'],
+    }
+    for keyword, values in keyword_tags.items():
+        if keyword in name:
+            tags.update(values)
+    if not tags:
+        tags.update(['culture', 'afternoon'])
+    return sorted(tags)
+
+def score_place_for_slot(place, slot, interests, constraints):
+    tags = set(infer_place_tags(place))
+    score = 0
+    factors = []
+    slot_affinity = {
+        'morning': {'morning', 'culture', 'history', 'nature', 'outdoor'},
+        'afternoon': {'afternoon', 'culture', 'art', 'shopping', 'indoor', 'nature'},
+        'evening': {'evening', 'food', 'shopping', 'view', 'city'},
+    }
+    overlap = tags & slot_affinity[slot]
+    if overlap:
+        score += 3
+        factors.append(f"{slot} fit via {', '.join(sorted(overlap)[:2])}")
+    if interests:
+        interest_overlap = tags & set(interests)
+        if interest_overlap:
+            score += 4
+            factors.append(f"matches {', '.join(sorted(interest_overlap)[:2])} interest")
+    if constraints.get('weather_sensitivity') and ('indoor' in tags or 'museum' in place.lower()):
+        score += 2
+        factors.append('weather-resilient stop')
+    if constraints.get('food_preference') and ('food' in tags or 'market' in place.lower()):
+        score += 2
+        factors.append('good food-preference checkpoint')
+    if slot == 'evening' and constraints.get('opening_hours_sensitivity'):
+        score += 1
+        factors.append('flagged for evening-hours verification')
+    return score, factors or [f"balanced {slot} placement"]
+
+def build_day_plan_continuity(dest_data, interests, constraints):
+    if not dest_data:
+        return None
+    highlights = list(dest_data.get('highlights', []))
+    if len(highlights) < 3:
+        return None
+    remaining = highlights[:]
+    slots = ['morning', 'afternoon', 'evening']
+    plan = []
+    for slot in slots:
+        ranked = []
+        for idx, place in enumerate(remaining):
+            score, factors = score_place_for_slot(place, slot, interests, constraints)
+            # Stable tie-breaker keeps earlier reference ordering to avoid surprise churn.
+            ranked.append((score, -idx, place, factors))
+        ranked.sort(reverse=True)
+        _, _, chosen, factors = ranked[0]
+        remaining.remove(chosen)
+        plan.append({'slot': slot, 'place': chosen, 'continuity_factors': factors[:3]})
+    neighborhood = constraints.get('neighborhood_preference')
+    if neighborhood:
+        start = f"Start from {neighborhood} and keep the first two stops in one compact cluster before the evening anchor."
+    else:
+        start = "Start with the most time-sensitive cultural/outdoor stop, then keep the next stop nearby before the evening anchor."
+    pace = constraints.get('trip_pace')
+    if pace == 'relaxed':
+        pace_note = 'Leave a buffer between afternoon and evening so the day does not feel rushed.'
+    elif pace == 'packed':
+        pace_note = 'Use the compact sequence to add optional nearby stops without crossing town repeatedly.'
+    else:
+        pace_note = 'Keep a balanced tempo with one clear morning-to-afternoon-to-evening arc.'
+    transitions = [
+        {
+            'from': plan[0]['place'],
+            'to': plan[1]['place'],
+            'rationale': 'Grouped as the main daytime cluster to reduce backtracking and preserve energy.'
+        },
+        {
+            'from': plan[1]['place'],
+            'to': plan[2]['place'],
+            'rationale': 'Moves into a stronger late-day/evening anchor after the core sightseeing block.'
+        },
+    ]
+    return {
+        'principle': 'Sequence morning, afternoon, and evening stops as a compact logical arc instead of isolated picks.',
+        'base_strategy': start,
+        'pace_note': pace_note,
+        'stops': plan,
+        'transitions': transitions,
+        'backtracking_reduction': 'Reduce backtracking by avoiding returns to the base area between slots unless weather, accessibility, or opening-hours checks force a swap.'
+    }
+
 def extract_interests(text):
     keywords = ['food', 'culinary', 'temple', 'culture', 'history', 'museum', 'art',
                 'beach', 'adventure', 'hiking', 'nature', 'nightlife', 'shopping',
@@ -329,6 +438,10 @@ if interests:
 candidate_explanations = build_candidate_explanations(dest_data, interests, budget_tier, duration, travelers, constraints)
 if candidate_explanations:
     ctx['candidate_explanations'] = candidate_explanations
+
+day_plan_continuity = build_day_plan_continuity(dest_data, interests, constraints)
+if day_plan_continuity:
+    ctx['day_plan_continuity'] = day_plan_continuity
 
 budget_known = bool(budget_tier or constraints.get('budget_cap'))
 constraints_known = bool(constraints)

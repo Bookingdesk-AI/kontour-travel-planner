@@ -1,0 +1,134 @@
+{
+  "destination": {
+    "name": "Tokyo",
+    "country": "Japan",
+    "coordinates": [
+      35.6762,
+      139.6503
+    ],
+    "currency": "JPY",
+    "timezone": "Asia/Tokyo",
+    "avg_daily_cost_usd": {
+      "budget": 62,
+      "mid": 175,
+      "luxury": 510
+    }
+  },
+  "duration_days": 5,
+  "travelers": {
+    "adults": 2
+  },
+  "constraints": {
+    "trip_pace": "relaxed",
+    "neighborhood_preference": "Shinjuku",
+    "opening_hours_sensitivity": [
+      "must_verify_open",
+      "open_on_monday"
+    ],
+    "food_preference": [
+      "vegetarian"
+    ],
+    "weather_sensitivity": [
+      "rain_sensitive",
+      "needs_indoor_backup"
+    ]
+  },
+  "constraint_capture": {
+    "captured": [
+      "trip_pace",
+      "neighborhood_preference",
+      "opening_hours_sensitivity",
+      "food_preference",
+      "weather_sensitivity"
+    ],
+    "missing": [
+      "budget_cap"
+    ],
+    "complete": false,
+    "next_question": "What total or per-person budget cap should I stay under?"
+  },
+  "interests": [
+    "food"
+  ],
+  "candidate_explanations": [
+    {
+      "name": "Shibuya Crossing",
+      "why_chosen": "thematic fit: matches food interest; budget fit: aligns with mid tier at about $175/person/day; rating signal: modeled as 4.6/5+ candidate quality",
+      "factors": [
+        "thematic fit: matches food interest",
+        "budget fit: aligns with mid tier at about $175/person/day",
+        "rating signal: modeled as 4.6/5+ candidate quality",
+        "distance/base fit: sequence from Shinjuku to reduce cross-town backtracking"
+      ]
+    },
+    {
+      "name": "Senso-ji Temple",
+      "why_chosen": "thematic fit: matches food interest; budget fit: aligns with mid tier at about $175/person/day; rating signal: modeled as 4.6/5+ candidate quality",
+      "factors": [
+        "thematic fit: matches food interest",
+        "budget fit: aligns with mid tier at about $175/person/day",
+        "rating signal: modeled as 4.6/5+ candidate quality",
+        "distance/base fit: sequence from Shinjuku to reduce cross-town backtracking"
+      ]
+    },
+    {
+      "name": "Tsukiji Outer Market",
+      "why_chosen": "thematic fit: matches food interest; budget fit: aligns with mid tier at about $175/person/day; rating signal: modeled as 4.6/5+ candidate quality",
+      "factors": [
+        "thematic fit: matches food interest",
+        "budget fit: aligns with mid tier at about $175/person/day",
+        "rating signal: modeled as 4.6/5+ candidate quality",
+        "distance/base fit: sequence from Shinjuku to reduce cross-town backtracking"
+      ]
+    }
+  ],
+  "day_plan_continuity": {
+    "principle": "Sequence morning, afternoon, and evening stops as a compact logical arc instead of isolated picks.",
+    "base_strategy": "Start from Shinjuku and keep the first two stops in one compact cluster before the evening anchor.",
+    "pace_note": "Leave a buffer between afternoon and evening so the day does not feel rushed.",
+    "stops": [
+      {
+        "slot": "morning",
+        "place": "Tsukiji Outer Market",
+        "continuity_factors": [
+          "matches food interest",
+          "good food-preference checkpoint"
+        ]
+      },
+      {
+        "slot": "afternoon",
+        "place": "Senso-ji Temple",
+        "continuity_factors": [
+          "afternoon fit via culture"
+        ]
+      },
+      {
+        "slot": "evening",
+        "place": "Shibuya Crossing",
+        "continuity_factors": [
+          "evening fit via city, evening",
+          "flagged for evening-hours verification"
+        ]
+      }
+    ],
+    "transitions": [
+      {
+        "from": "Tsukiji Outer Market",
+        "to": "Senso-ji Temple",
+        "rationale": "Grouped as the main daytime cluster to reduce backtracking and preserve energy."
+      },
+      {
+        "from": "Senso-ji Temple",
+        "to": "Shibuya Crossing",
+        "rationale": "Moves into a stronger late-day/evening anchor after the core sightseeing block."
+      }
+    ],
+    "backtracking_reduction": "Reduce backtracking by avoiding returns to the base area between slots unless weather, accessibility, or opening-hours checks force a swap."
+  },
+  "planning_stage": "develop",
+  "open_decisions": [
+    "budget",
+    "accommodation",
+    "transport"
+  ]
+}
